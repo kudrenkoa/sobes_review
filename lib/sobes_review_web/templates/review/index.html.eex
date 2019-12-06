@@ -5,21 +5,21 @@
       <br>
       <form action="/loadfile" method="POST">
         <div class="file-field input-field">
-          <div class="btn blue-grey lighten-2">
+          <div class="btn teal darken-3">
             <span>Choose your file</span>
-            <input type="file">
+            <input type="file" id="file_upload" onchange="updateUploadButtonState()">
           </div>
           <div class="file-path-wrapper">
             <input class="file-path validate" type="text">
           </div>
           <br>
-          <button class="btn waves-effect waves-light btn-large teal lighten-1" type="submit" name="action">Upload
+          <button class="btn waves-effect waves-light btn-large teal lighten-1" type="submit" id="post_review_btn" name="action" disabled="">Upload
             <i class="material-icons right">cloud_upload</i>
           </button>
         </div>
       </form>
     </div>
-      <div class="col s4">
+      <div class="col s2 offset-s1">
         <h5>Count</h5>
         <h2>-1</h2>
       </div>
@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col m6">
         <label>Group By</label>
-        <select class="browser-default" onchange="updateForm(this, 'group_by')">
+        <select class="browser-default" onchange="updateGetForm(this, 'group_by')">
           <option value="" disabled selected>Choose your option</option>
           <option value="gender">Gender</option>
           <option value="city">City</option>
@@ -41,7 +41,7 @@
       </div>
       <div class="col m6">
         <label>Review type</label>
-        <select class="browser-default" onchange="updateForm(this, 'review_type')">
+        <select class="browser-default" onchange="updateGetForm(this, 'review_type')">
           <option value="" disabled selected>Choose your option</option>
           <option value="html">Html</option>
           <option value="xls">Excel</option>
@@ -57,27 +57,33 @@
       <input type="text" style="visibility: hidden;" id="review_type">
     </form>
 </div>
+
 <script>
-  get_reviews_btn = document.getElementById("get_reviews_btn");
-  console.log(get_reviews_btn);
-  
+  getReviewButton = document.getElementById("get_reviews_btn");
+  uploadReviewButton = document.getElementById("post_review_btn");
+  fileUpload =  document.getElementById("file_upload");
   let textInputs = {
     "group_by": document.getElementById("group_by"),
     "review_type": document.getElementById("review_type")
   };
 
+  function updateUploadButtonState() {
+    uploadReviewButton.disabled = fileUpload.files.length == 0
+  }
+
   function inputsAreInvalid() {
     return textInputs["group_by"].value == "" || textInputs["review_type"].value == "";
   }
 
-  function updateButtonDisabledState() {
-    get_reviews_btn.disabled = inputsAreInvalid();
+  function updateGetReviewButtonDisabledState() {
+    getReviewButton.disabled = inputsAreInvalid();
   }
 
-  function updateForm(param, elementID) {
+  function updateGetForm(param, elementID) {
     textInputs[elementID].value = param.options[param.selectedIndex].value;
-    updateButtonDisabledState();
+    updateGetReviewButtonDisabledState();
   }
 
-  updateButtonDisabledState();
+  updateGetReviewButtonDisabledState();
+  updateUploadButtonState();
 </script>
