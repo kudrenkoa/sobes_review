@@ -1,35 +1,83 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>A productive web framework that<br/>does not compromise speed or maintainability.</p>
-</section>
+<div>
+  <div class="row">
+    <div class="col s8">
+      <h5>Upload your review</h5>
+      <br>
+      <form action="/loadfile" method="POST">
+        <div class="file-field input-field">
+          <div class="btn blue-grey lighten-2">
+            <span>Choose your file</span>
+            <input type="file">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+          <br>
+          <button class="btn waves-effect waves-light btn-large teal lighten-1" type="submit" name="action">Upload
+            <i class="material-icons right">cloud_upload</i>
+          </button>
+        </div>
+      </form>
+    </div>
+      <div class="col s4">
+        <h5>Count</h5>
+        <h2>-1</h2>
+      </div>
+  </div>
+    <hr>
+    <h5>Reviews</h5>
+    <br>
+    <div class="row">
+      <div class="col m6">
+        <label>Group By</label>
+        <select class="browser-default" onchange="updateForm(this, 'group_by')">
+          <option value="" disabled selected>Choose your option</option>
+          <option value="gender">Gender</option>
+          <option value="city">City</option>
+          <option value="emotion">Emotion</option>
+          <option value="month">Month</option>
+          <option value="time">Time</option>
+        </select>
+      </div>
+      <div class="col m6">
+        <label>Review type</label>
+        <select class="browser-default" onchange="updateForm(this, 'review_type')">
+          <option value="" disabled selected>Choose your option</option>
+          <option value="html">Html</option>
+          <option value="xls">Excel</option>
+        </select>
+      </div>
+    </div>
+    <form action="/getreviews", method="GET">
+      <button class="btn waves-effect waves-light btn-large teal lighten-1" 
+        id="get_reviews_btn" type="submit" disabled="">Get reviews
+          <i class="material-icons right">cloud_download</i>
+      </button>
+      <input type="text" style="visibility: hidden;" id="group_by">
+      <input type="text" style="visibility: hidden;" id="review_type">
+    </form>
+</div>
+<script>
+  get_reviews_btn = document.getElementById("get_reviews_btn");
+  console.log(get_reviews_btn);
+  
+  let textInputs = {
+    "group_by": document.getElementById("group_by"),
+    "review_type": document.getElementById("review_type")
+  };
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">v1.4 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-    </ul>
-  </article>
-</section>
+  function inputsAreInvalid() {
+    return textInputs["group_by"].value == "" || textInputs["review_type"].value == "";
+  }
+
+  function updateButtonDisabledState() {
+    get_reviews_btn.disabled = inputsAreInvalid();
+  }
+
+  function updateForm(param, elementID) {
+    textInputs[elementID].value = param.options[param.selectedIndex].value;
+    updateButtonDisabledState();
+  }
+
+  updateButtonDisabledState();
+</script>
