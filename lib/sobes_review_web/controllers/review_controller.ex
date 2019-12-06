@@ -1,4 +1,4 @@
-defmodule SobesReviewWeb.PageController do
+defmodule SobesReviewWeb.ReviewController do
   use SobesReviewWeb, :controller
 
   def index(conn, _params) do
