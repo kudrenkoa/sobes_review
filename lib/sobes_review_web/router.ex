@@ -9,9 +9,9 @@ defmodule SobesReviewWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
+  # pipeline :api do
+  #   plug :accepts, ["json"]
+  # end
 
   scope "/", SobesReviewWeb do
     pipe_through :browser

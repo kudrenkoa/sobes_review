@@ -1,0 +1,31 @@
+<h5>Reviews</h5>
+<br>
+<div class="row">
+  <div class="col m6">
+    <label>Group By</label>
+    <select class="browser-default" onchange="updateGetForm(this, 'group_by')">
+      <option value="" disabled selected>Choose your option</option>
+      <option value="gender">Gender</option>
+      <option value="city">City</option>
+      <option value="emotion">Emotion</option>
+      <option value="month">Month</option>
+      <option value="time">Time</option>
+    </select>
+  </div>
+  <div class="col m6">
+    <label>Review type</label>
+    <select class="browser-default" onchange="updateGetForm(this, 'review_type')">
+      <option value="" disabled selected>Choose your option</option>
+      <option value="html">Html</option>
+      <option value="xls">Excel</option>
+    </select>
+  </div>
+</div>
+<form action="/getreviews", method="GET">
+  <button class="btn waves-effect waves-light btn-large teal lighten-1" 
+    id="get_reviews_btn" type="submit" disabled="">Get reviews
+      <i class="material-icons right">cloud_download</i>
+  </button>
+  <input type="text" style="visibility: hidden;" id="group_by">
+  <input type="text" style="visibility: hidden;" id="review_type">
+</form>

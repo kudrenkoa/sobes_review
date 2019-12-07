@@ -2,7 +2,7 @@ defmodule SobesReviewWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", SobesReviewWeb.RoomChannel
+  # channel "review:*", SobesReviewWeb.ReviewChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
