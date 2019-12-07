@@ -1,23 +1,7 @@
 <div>
   <div class="row">
     <div class="col s8">
-      <h5>Upload your review</h5>
-      <br>
-      <form action="/loadfile" method="POST">
-        <div class="file-field input-field">
-          <div class="btn teal darken-3">
-            <span>Choose your file</span>
-            <input type="file" id="file_upload" onchange="updateUploadButtonState()">
-          </div>
-          <div class="file-path-wrapper">
-            <input class="file-path validate" type="text">
-          </div>
-          <br>
-          <button class="btn waves-effect waves-light btn-large teal lighten-1" type="submit" id="post_review_btn" name="action" disabled="">Upload
-            <i class="material-icons right">cloud_upload</i>
-          </button>
-        </div>
-      </form>
+    <%= render "fileupload.html" %>
     </div>
       <div class="col s2 offset-s1">
         <h5>Count</h5>
@@ -25,37 +9,7 @@
       </div>
   </div>
     <hr>
-    <h5>Reviews</h5>
-    <br>
-    <div class="row">
-      <div class="col m6">
-        <label>Group By</label>
-        <select class="browser-default" onchange="updateGetForm(this, 'group_by')">
-          <option value="" disabled selected>Choose your option</option>
-          <option value="gender">Gender</option>
-          <option value="city">City</option>
-          <option value="emotion">Emotion</option>
-          <option value="month">Month</option>
-          <option value="time">Time</option>
-        </select>
-      </div>
-      <div class="col m6">
-        <label>Review type</label>
-        <select class="browser-default" onchange="updateGetForm(this, 'review_type')">
-          <option value="" disabled selected>Choose your option</option>
-          <option value="html">Html</option>
-          <option value="xls">Excel</option>
-        </select>
-      </div>
-    </div>
-    <form action="/getreviews", method="GET">
-      <button class="btn waves-effect waves-light btn-large teal lighten-1" 
-        id="get_reviews_btn" type="submit" disabled="">Get reviews
-          <i class="material-icons right">cloud_download</i>
-      </button>
-      <input type="text" style="visibility: hidden;" id="group_by">
-      <input type="text" style="visibility: hidden;" id="review_type">
-    </form>
+    <%= render "getreviews.html" %>
 </div>
 
 <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
