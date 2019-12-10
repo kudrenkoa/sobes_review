@@ -36,8 +36,11 @@ Decodes csv files
 
   defp init_review_from_stream(stream) do
     Stream.map(stream, fn [name, gender, city, text, datetime] ->
-      %{name: name, gender: check_male_gender(gender),
-      city: city, datetime: datetime, text: text}
+      %{name: name,
+        gender: check_male_gender(gender),
+        city: city,
+        datetime: DateTime.from_unix!(elem(Integer.parse(datetime), 0)),
+        text: text}
       end)
   end
 

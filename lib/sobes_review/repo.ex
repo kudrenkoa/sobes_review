@@ -4,7 +4,8 @@ defmodule SobesReview.Repo do
     adapter: Ecto.Adapters.Postgres
 
 
-  # def add_review(attrs) do
-  #   attrs |> SobesReview.Review.changeset
-  # end
+  def add_review({:ok, attrs}) do
+    SobesReview.Review.changeset(%SobesReview.Review{}, attrs)
+    |> insert
+  end
 end
