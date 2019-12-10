@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :sobes_review, SobesReview.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "111",
   database: "sobes_review_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
