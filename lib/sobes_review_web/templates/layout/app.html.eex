@@ -21,6 +21,7 @@
     <br>
     <%= render @view_module, @view_template, assigns %>
   </div>
+  <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/materialize.min.js") %>"></script>
 </body>
 </html>

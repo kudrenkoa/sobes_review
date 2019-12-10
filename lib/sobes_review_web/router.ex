@@ -16,7 +16,9 @@ defmodule SobesReviewWeb.Router do
   scope "/", SobesReviewWeb do
     pipe_through :browser
 
-    get "/", ReviewController, :index
+    # get "/", ReviewController, :index
+    # get "/create", ReviewController, :create
+    resources "/", ReviewController, only: [:index, :new, :create]
   end
 
   # Other scopes may use custom stacks.

@@ -1,6 +1,6 @@
-getReviewButton = document.getElementById("get_reviews_btn");
-uploadReviewButton = document.getElementById("post_review_btn");
-fileUpload =  document.getElementById("file_upload");
+let getReviewButton = document.getElementById("get_reviews_btn");
+let uploadReviewButton = document.getElementById("post_review_btn");
+let fileUpload = document.getElementById("upload")
 let textInputs = {
   "group_by": document.getElementById("group_by"),
   "review_type": document.getElementById("review_type")
