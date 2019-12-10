@@ -18,14 +18,31 @@ Decodes csv files
   end
 
   defp read_file(file_path) do
-    File.read(file_path)
+    file_path |> File.stream!
   end
 
-  defp parse_csv({:ok, text}) do
+  defp parse_csv(stream) do
     NimbleCSV.define(MyParser, separator: ";", escape: "\"")
-    {:ok,
-      text |> MyParser.parse_string
-    }
+    try do
+      {:ok, stream
+        |> MyParser.parse_stream
+        |> init_review_from_stream
+        |> Enum.take(1)}
+      rescue
+        FunctionClauseError -> {:error, :invalid_file_format}
+        File.Error -> {:error, :no_file}
+    end
+  end
+
+  defp init_review_from_stream(stream) do
+    Stream.map(stream, fn [name, gender, city, text, datetime] ->
+      %{name: name, gender: check_male_gender(gender),
+      city: city, datetime: datetime, text: text}
+      end)
+  end
+
+  defp check_male_gender(gender) do
+    gender == "m" or gender == "true" or gender == "male"
   end
 
   defp parse_csv(error) do
@@ -33,7 +50,7 @@ Decodes csv files
   end
 
   defp get_head({:ok, []}) do
-    {:error, :emptyfile}
+    {:error, :empty_file}
   end
 
   defp get_head({:ok, list}) do
