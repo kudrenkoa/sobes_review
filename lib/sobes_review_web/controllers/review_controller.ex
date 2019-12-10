@@ -6,7 +6,7 @@ defmodule SobesReviewWeb.ReviewController do
   end
 
   def create(conn, %{"upload" => %Plug.Upload{}=upload}) do
-    IO.inspect upload
+    IO.puts upload.path
     redirect(conn, to: "/")
   end
 end

@@ -11,6 +11,6 @@
       <input class="file-path validate" type="text">
     </div>
     <br>
-    <%= submit "Upload", class: "btn btn-primary", id: "post_review_btn" %>
+    <%= submit "Upload", class: "btn btn-primary", id: "post_review_btn", disabled: "" %>
   </div>
 <% end %>
