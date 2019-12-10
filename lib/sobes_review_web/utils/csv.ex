@@ -14,7 +14,7 @@ Decodes csv files
     file_path
     |> read_file
     |> parse_csv
-    |> hd
+    |> get_head
   end
 
   defp read_file(file_path) do
@@ -23,7 +23,24 @@ Decodes csv files
 
   defp parse_csv({:ok, text}) do
     NimbleCSV.define(MyParser, separator: ";", escape: "\"")
-    text
-    |> MyParser.parse_string
+    {:ok,
+      text |> MyParser.parse_string
+    }
+  end
+
+  defp parse_csv(error) do
+    error
+  end
+
+  defp get_head({:ok, []}) do
+    {:error, :emptyfile}
+  end
+
+  defp get_head({:ok, list}) do
+    {:ok, hd list}
+  end
+
+  defp get_head(error) do
+    error
   end
 end
