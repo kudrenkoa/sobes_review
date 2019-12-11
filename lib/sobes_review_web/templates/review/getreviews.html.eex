@@ -21,11 +21,9 @@
     </select>
   </div>
 </div>
-<form action="/getreviews", method="GET">
+<form action="/reports", id="get_reports_form" method="GET">
   <button class="btn waves-effect waves-light btn-large teal lighten-1" 
     id="get_reviews_btn" type="submit" disabled="">Get reviews
       <i class="material-icons right">cloud_download</i>
   </button>
-  <input type="text" style="visibility: hidden;" id="group_by">
-  <input type="text" style="visibility: hidden;" id="review_type">
 </form>
