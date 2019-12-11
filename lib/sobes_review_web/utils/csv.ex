@@ -2,6 +2,7 @@ defmodule SobesReviewWeb.Utils.Csv do
 @moduledoc """
 Decodes csv files
 """
+
   @doc """
   Decodes CSV file via file_path
   Returns list of first line data
@@ -9,7 +10,7 @@ Decodes csv files
   iex> SobesReviewWeb.Utils.Csv.decode("file.csv")\n
   [1, 2, 3, 4]
   """
-  @spec decode(binary) :: list
+  @spec decode(binary) :: tuple
   def decode(file_path) do
     file_path
     |> read_file
@@ -46,10 +47,6 @@ Decodes csv files
 
   defp check_male_gender(gender) do
     gender == "m" or gender == "true" or gender == "male"
-  end
-
-  defp parse_csv(error) do
-    error
   end
 
   defp get_head({:ok, []}) do
