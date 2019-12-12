@@ -16,3 +16,6 @@ config :sobes_review, SobesReviewWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :app_vars,
+  pdots_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"
