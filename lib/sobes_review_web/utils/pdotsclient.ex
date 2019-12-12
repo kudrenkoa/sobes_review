@@ -8,8 +8,12 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
   Else returns tuple with error
   """
 
-  def add_emotion({:ok, %{text: text} = review}) do
+  def add_emotion({:ok, %{text: text} = review}) when text != "" do
     {:ok, Map.put(review, :emotion, get_emotion(text))}
+  end
+
+  def add_emotion({:ok, %{text: ""}}) do
+    {:error, :no_review_text}
   end
 
   def add_emotion({:error, _err} = error) do
@@ -45,16 +49,12 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
     end
   end
 
-  def get_emotion(_text) do
-    %{"code" => 200, "message" => "empty text"}
-  end
-
   defp get_max_emotion(%{"emotion" => emotions}) do
     Enum.max_by(emotions, &(elem(&1, 1)))
     |> elem(0)
   end
 
-  defp get_max_emotion(error) do
-    error
+  defp get_max_emotion(_error) do
+    {:error, :paralleldots_error}
   end
 end

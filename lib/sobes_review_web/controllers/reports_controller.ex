@@ -10,10 +10,17 @@ defmodule SobesReviewWeb.ReportsController do
     |> decode
     |> add_emotion
     |> add_review
-    redirect(conn, to: "/")
+    |> render_response(conn)
   end
 
   def get(conn, %{"group_by" => _group_by, "type" => _type} = _params) do
     redirect(conn, to: "/")
+  end
+
+  def render_response({:ok, _data}, conn) do
+    redirect(conn, to: "/")
+  end
+  def render_response({:error, error}, conn) do
+    render(conn, "errors.html", error: error)
   end
 end
