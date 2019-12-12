@@ -1,0 +1,6 @@
+<h4>Error occured</h4>
+<div class="card-panel">
+  <blockquote>
+    <h5><%= render_error_message(@error) %></h5>
+  </blockquote>    
+</div>
