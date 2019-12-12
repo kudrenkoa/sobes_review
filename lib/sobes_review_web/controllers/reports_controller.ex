@@ -1,12 +1,14 @@
 defmodule SobesReviewWeb.ReportsController do
   use SobesReviewWeb, :controller
   import SobesReviewWeb.Utils.Csv, only: [decode: 1]
+  import SobesReviewWeb.Utils.PdotsClient, only: [add_emotion: 1]
   import SobesReview.Repo, only: [add_review: 1]
 
   @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, %{"upload" => %Plug.Upload{}=upload}) do
     upload.path
     |> decode
+    |> add_emotion
     |> add_review
     redirect(conn, to: "/")
   end

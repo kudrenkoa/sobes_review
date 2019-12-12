@@ -1,4 +1,21 @@
 defmodule SobesReviewWeb.Utils.PdotsClient do
+  @moduledoc """
+  Represents methods for getting emotions from text via apis.paralleldots.com
+  """
+  @doc """
+  Sends post request to apis.paralleldots.com/v4/emotion with text
+  receives all emotions response, gets max emotion end returns updated review tuple {:ok, map} if no errors.
+  Else returns tuple with error
+  """
+
+  def add_emotion({:ok, %{text: text} = review}) do
+    {:ok, Map.put(review, :emotion, get_emotion(text))}
+  end
+
+  def add_emotion({:error, _err} = error) do
+    error
+  end
+
   @doc """
   Sends post request to apis.paralleldots.com/v4/emotion with text,
   receives all emotions response and returns max emotion by value or
