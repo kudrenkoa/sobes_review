@@ -3,11 +3,12 @@ defmodule SobesReview.Review do
   import Ecto.Changeset
 
   schema "reviews" do
-    field :city, :string
-    field :datetime, :utc_datetime
+    field :city, :string, size: 80, null: false
+    field :datetime, :utc_datetime, null: false
     field :gender, :boolean, default: false
-    field :name, :string
-    field :text, :string
+    field :name, :string, size: 50, null: false
+    field :text, :string, null: false
+    field :emotion, :string, null: false
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule SobesReview.Review do
   @doc false
   def changeset(review, attrs) do
     review
-    |> cast(attrs, [:name, :gender, :city, :text, :datetime])
-    |> validate_required([:name, :gender, :city, :text, :datetime])
+    |> cast(attrs, [:name, :gender, :city, :text, :datetime, :emotion])
+    |> validate_required([:name, :gender, :city, :text, :datetime, :emotion])
   end
 end
