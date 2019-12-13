@@ -18,4 +18,4 @@ config :sobes_review, SobesReviewWeb.Endpoint,
 config :logger, level: :warn
 
 config :app_vars,
-  pdots_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"
+  pdots_api_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"
