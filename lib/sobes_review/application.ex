@@ -2,8 +2,8 @@ defmodule SobesReview.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
-
   use Application
+  import SobesReviewWeb.Utils.Cache, only: [init_repo: 1]
 
   def start(_type, _args) do
     # List all child processes to be supervised
@@ -30,10 +30,10 @@ defmodule SobesReview.Application do
     SobesReviewWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
   def init_cache() do
     import Ecto.Query, only: [from: 2]
     review_count = SobesReview.Repo.one(from r in SobesReview.Review, select: count(r))
-    :ets.new(:counters, [:set, :public, :named_table])
-    :ets.insert(:counters, {"reviews", review_count })
+    init_repo(%{reviews_count: review_count})
   end
 end
