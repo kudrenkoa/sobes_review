@@ -4,14 +4,15 @@ defmodule SobesReviewWeb.RepoTest do
   import SobesReview.Repo, only: [add_review: 1]
 
   test "add_review" do
+    emotion = "Excited"
     res = %{
-      name: "",
+      name: "ivan",
       gender: true,
-      city: "",
+      city: "donetsk",
       datetime: DateTime.from_unix!(123),
       text: "text",
     }
-    case add_review({:ok, res, "Excited"}) do
+    case add_review({:ok, res, emotion}) do
       {:ok, _} -> assert true
       {:error, description} -> assert false, inspect description
     end

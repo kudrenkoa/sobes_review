@@ -17,6 +17,6 @@ defmodule SobesReview.Review do
   def changeset(review, attrs) do
     review
     |> cast(attrs, [:name, :gender, :city, :text, :datetime])
-    |> validate_required([:name, :gender, :city, :text, :datetime, :emotion_id])
+    |> validate_required([:name, :gender, :city, :text, :datetime])
   end
 end
