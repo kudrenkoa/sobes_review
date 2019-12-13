@@ -19,7 +19,9 @@ defmodule SobesReview.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SobesReview.Supervisor]
-    Supervisor.start_link(children, opts)
+    sv = Supervisor.start_link(children, opts)
+    init_cache()
+    sv
   end
 
   # Tell Phoenix to update the endpoint configuration
@@ -27,5 +29,11 @@ defmodule SobesReview.Application do
   def config_change(changed, _new, removed) do
     SobesReviewWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+  def init_cache() do
+    import Ecto.Query, only: [from: 2]
+    review_count = SobesReview.Repo.one(from r in SobesReview.Review, select: count(r))
+    :ets.new(:counters, [:set, :public, :named_table])
+    :ets.insert(:counters, {"reviews", review_count })
   end
 end

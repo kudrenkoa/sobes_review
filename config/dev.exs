@@ -76,4 +76,4 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :app_vars,
-  pdots_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"
+  pdots_api_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"

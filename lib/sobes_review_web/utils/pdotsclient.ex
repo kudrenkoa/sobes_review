@@ -2,6 +2,7 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
   @moduledoc """
   Represents methods for getting emotions from text via apis.paralleldots.com
   """
+
   @doc """
   Sends post request to apis.paralleldots.com/v4/emotion with text
   receives all emotions response, gets max emotion end returns updated review tuple {:ok, map} if no errors.
@@ -32,10 +33,10 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
   """
   @spec get_emotion(binary) :: binary | tuple
   def get_emotion(text) when text != "" do
-    key = Application.get_env(:app_vars, :pdots_key)
+    api_key = Application.get_env(:app_vars, :pdots_api_key)
     headers = [{"Content-Type", "application/x-www-form-urlencoded"}]
     {:ok, conn} = Mint.HTTP.connect(:http, "apis.paralleldots.com", 80)
-    {:ok, conn, _request_ref} = Mint.HTTP.request(conn, "POST", "/v4/emotion", headers, "text=#{text}&api_key=#{key}")
+    {:ok, conn, _request_ref} = Mint.HTTP.request(conn, "POST", "/v4/emotion", headers, "text=#{text}&api_key=#{api_key}")
     receive do
       message ->
         {:ok, conn, responses} = Mint.HTTP.stream(conn, message)
