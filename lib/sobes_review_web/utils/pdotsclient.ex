@@ -9,7 +9,7 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
   """
 
   def add_emotion({:ok, %{text: text} = review}) when text != "" do
-    {:ok, Map.put(review, :emotion, get_emotion(text))}
+    {:ok, review, get_emotion(text)}
   end
 
   def add_emotion({:ok, %{text: ""}}) do

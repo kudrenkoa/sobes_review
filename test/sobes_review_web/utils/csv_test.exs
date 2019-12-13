@@ -6,7 +6,7 @@ defmodule SobesReviewWeb.UtilsCsvTest do
     correct_test_file = "./correct_test_file.csv"
     correct_test_file
     |> File.write("name;gender;city;text;date\nivan;male;donetsk;great;123")
-    right = {:ok, %{city: "donetsk", datetime: DateTime.from_unix!(elem(Integer.parse("123"), 0)), gender: true, name: "ivan", text: "great"}}
+    right = {:ok, %{city: "donetsk", datetime: DateTime.from_unix!(123), gender: true, name: "ivan", text: "great"}}
     assert decode(correct_test_file) == right
     File.rm(correct_test_file)
   end

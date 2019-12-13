@@ -4,8 +4,7 @@ defmodule SobesReview.Emotion do
 
   schema "emotions" do
     field :name, :string
-
-    timestamps()
+    has_many :reviews, SobesReview.Review
   end
 
   @doc false

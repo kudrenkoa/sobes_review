@@ -5,9 +5,20 @@ defmodule SobesReview.Repo do
     adapter: Ecto.Adapters.Postgres
 
 
-  def add_review({:ok, attrs}) do
-    SobesReview.Review.changeset(%SobesReview.Review{}, attrs)
+  def add_review({:ok, attrs, emotion}) do
+    one(from e in SobesReview.Emotion, where: e.name == ^emotion)
+    |> Ecto.build_assoc(:reviews, attrs)
+    |> SobesReview.Review.changeset(attrs)
     |> insert
+    |> check_review_insert
+  end
+
+  defp check_review_insert({:ok, _} = res) do
+    res
+  end
+
+  defp check_review_insert({:error, handler}) do
+    {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
   end
 
   def add_review(err) do

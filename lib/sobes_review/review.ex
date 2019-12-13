@@ -8,7 +8,7 @@ defmodule SobesReview.Review do
     field :gender, :boolean, default: false
     field :name, :string, size: 50, null: false
     field :text, :string, null: false
-    field :emotion, :string, null: false
+    belongs_to :emotion, SobesReview.Emotion
 
     timestamps()
   end
@@ -16,7 +16,7 @@ defmodule SobesReview.Review do
   @doc false
   def changeset(review, attrs) do
     review
-    |> cast(attrs, [:name, :gender, :city, :text, :datetime, :emotion])
-    |> validate_required([:name, :gender, :city, :text, :datetime, :emotion])
+    |> cast(attrs, [:name, :gender, :city, :text, :datetime])
+    |> validate_required([:name, :gender, :city, :text, :datetime, :emotion_id])
   end
 end
