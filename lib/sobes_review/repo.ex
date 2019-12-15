@@ -1,56 +1,57 @@
 defmodule SobesReview.Repo do
   import Ecto.Query, only: [from: 2]
-  alias Ecto.Changeset
   alias SobesReview.{Emotion, Review, City}
 
   use Ecto.Repo,
     otp_app: :sobes_review,
     adapter: Ecto.Adapters.Postgres
 
-  def add_review({:ok, attrs, emotion}) do
 
-    # IN DEV
-
-    # emotion = one(from e in Emotion, where: e.name == ^emotion)
-    # city = get_city(attrs.city)
-
-    # case get_city(attrs.city) do
-    #   nil -> insert_city(attrs.city)
-    #   res -> res
-    # end
-    # %Review{}
-    # |> Review.changeset(attrs)
-    # |> insert
-    # |> update_review_fks(emotion, city)
-    # |> check_review_insert
+  @spec get_all_cities :: list
+  def get_all_cities() do
+    all(City)
   end
 
-  def add_review({:error, _} = error) do
-    error
+  @spec get_reviews_count :: integer
+  def get_reviews_count() do
+    one(from r in SobesReview.Review, select: count(r))
   end
 
-  defp update_review_fks({:ok, review = %Review{}}, emotion, city) do
+  def insert_review(attrs) do
+    %Review{}
+    |> Review.changeset(attrs)
+    |> insert
+    |> check_review_insert
+  end
+
+  def update_review_city({:ok, %Review{} = review}, city_id) do
+    attrs = %{city_id: city_id}
     review
-    |> preload(:emotion)
-    |> preload(:city)
-    |> Changeset.change
-    |> Changeset.put_assoc(:emotion, emotion)
-    |> Changeset.put_assoc(:city, city)
+    |> Review.changeset_city(attrs)
+    |> update!
+  end
+
+  def update_review_emotion(emotion_id, %Review{} = review) do
+    attrs = %{emotion_id: emotion_id}
+    review
+    |> Review.changeset_city(attrs)
     |> update
   end
 
   def insert_city(city) do
     %City{}
     |> City.changeset(%{name: city})
-    |> insert
+    |> insert!
   end
 
+  @spec get_city(binary) :: %Review{}
   def get_city(city) do
     one(from c in City, where: c.name == ^city)
   end
 
-  defp update_review_fks({:error, _data} = err, _emotion, _city) do
-    err
+  @spec get_all_emotions :: list
+  def get_all_emotions() do
+    all(Emotion)
   end
 
   defp check_review_insert({:ok, _} = res) do
@@ -60,6 +61,4 @@ defmodule SobesReview.Repo do
   defp check_review_insert({:error, handler}) do
     {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
   end
-
-
 end

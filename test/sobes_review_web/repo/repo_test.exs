@@ -9,7 +9,7 @@ defmodule SobesReviewWeb.RepoTest do
     res = %{
       name: "ivan",
       gender: true,
-      city: c,
+      city: "city",
       datetime: DateTime.from_unix!(123),
       text: "text",
     }

@@ -3,7 +3,8 @@ defmodule SobesReview.Application do
   # for more information on OTP Applications
   @moduledoc false
   use Application
-  import SobesReviewWeb.Utils.Cache, only: [init_repo: 1]
+  import SobesReviewWeb.Utils.Cache, only: [init_repo: 3]
+  import SobesReview.Repo, only: [get_all_cities: 0, get_reviews_count: 0, get_all_emotions: 0]
 
   def start(_type, _args) do
     # List all child processes to be supervised
@@ -32,8 +33,6 @@ defmodule SobesReview.Application do
   end
 
   def init_cache() do
-    import Ecto.Query, only: [from: 2]
-    review_count = SobesReview.Repo.one(from r in SobesReview.Review, select: count(r))
-    init_repo(%{reviews_count: review_count})
+    init_repo(get_reviews_count(), get_all_cities(), get_all_emotions())
   end
 end
