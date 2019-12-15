@@ -1,16 +1,14 @@
 defmodule SobesReviewWeb.ReportsController do
   use SobesReviewWeb, :controller
   import SobesReviewWeb.Utils.Csv, only: [decode: 1]
-  import SobesReviewWeb.Utils.PdotsClient, only: [add_emotion: 1]
-  import SobesReview.Repo, only: [add_review: 1]
-  import SobesReviewWeb.Utils.Cache, only: [increment_reviews_count: 1]
+  import SobesReviewWeb.Utils.Validators, only: [validate_decoded_data: 1]
+  import SobesReviewWeb.Utils.ReviewsService, only: [create_review: 1]
 
   def create(conn, %{"upload" => %Plug.Upload{}=upload}) do
     upload.path
     |> decode
-    |> add_emotion
-    |> add_review
-    |> increment_reviews_count
+    |> validate_decoded_data
+    |> create_review
     |> render_response(conn)
   end
 
