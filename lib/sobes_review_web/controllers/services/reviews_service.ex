@@ -4,15 +4,19 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   alias SobesReviewWeb.Utils.Cache
 
   def create_review({:ok, attrs}) do
-    city_id = get_city_id(attrs)
+    city_id = get_or_create_city(attrs)
     attrs
     |> Repo.insert_review
-    |> Repo.update_review_city(city_id)
-    |> PdotsClient.get_emotion(attrs.text, &update_emotions_callback/2)
-    |> Cache.increment_reviews_count
+    |> update_review_city(city_id)
+    |> get_emotion_async(attrs.text)
+    |> increment_review_count
   end
 
-  defp get_city_id(attrs) do
+  def create_review({:error, _err} = error) do
+    error
+  end
+
+  defp get_or_create_city(attrs) do
     attrs.city
     |> Cache.get_city_id_by_name
     |> case do
@@ -21,17 +25,40 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     end
   end
 
-  defp update_emotions_callback(review, emotion) do
-    IO.puts "RECEIVED EMOTION #{emotion}"
-    emotion
-    |> Cache.get_emotion_id
-    |> Repo.update_review_emotion(review)
-  end
-
   defp add_city(%{city: city_name}) do
     city = city_name
-    |> SobesReview.Repo.insert_city
+    |> Repo.insert_city
     |> Cache.insert_city
     city.id
+  end
+
+  def update_review_city({:ok, review}, city_id) do
+    Repo.update_review_city(review, city_id)
+  end
+
+  def update_review_city({:error, _error} = error, _city_id) do
+    error
+  end
+
+  def get_emotion_async({:ok, review}, text) do
+    PdotsClient.get_emotion_async(text, &(
+      &1
+      |> Cache.get_emotion_id
+      |> Repo.update_review_emotion(review)
+    ))
+    {:ok, review}
+  end
+
+  def get_emotion_async({:error, _err} = error, _text) do
+    error
+  end
+
+  def increment_review_count({:ok, _review} = message) do
+    Cache.increment_reviews_count()
+    message
+  end
+
+  def increment_review_count({:error, _err} = error) do
+    error
   end
 end

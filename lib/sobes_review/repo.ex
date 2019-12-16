@@ -24,17 +24,17 @@ defmodule SobesReview.Repo do
     |> check_review_insert
   end
 
-  def update_review_city({:ok, %Review{} = review}, city_id) do
+  def update_review_city(%Review{} = review, city_id) do
     attrs = %{city_id: city_id}
     review
     |> Review.changeset_city(attrs)
-    |> update!
+    |> update
   end
 
   def update_review_emotion(emotion_id, %Review{} = review) do
     attrs = %{emotion_id: emotion_id}
     review
-    |> Review.changeset_city(attrs)
+    |> Review.changeset_emotion(attrs)
     |> update
   end
 

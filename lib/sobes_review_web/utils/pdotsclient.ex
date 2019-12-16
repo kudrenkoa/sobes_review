@@ -1,17 +1,11 @@
 defmodule SobesReviewWeb.Utils.PdotsClient do
+  @callback emotion_callback(String.t) :: any
   @moduledoc """
   Represents methods for getting emotions from text via apis.paralleldots.com
   """
-  def add_emotion_async(review, text, callback) do
-    spawn_link(fn -> get_emotion(review, text, callback) end)
-    {:ok, review}
-  end
-  def add_emotion({:ok, %{text: ""}}) do
-    {:error, :no_review_text}
-  end
-
-  def add_emotion({:error, _err} = error) do
-    error
+  @spec get_emotion_async(String.t, function) :: any
+  def get_emotion_async(text, callback) do
+    spawn(fn -> get_emotion(text, callback) end)
   end
 
   @doc """
@@ -21,8 +15,8 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
   ## Examples
 
   """
-  @spec get_emotion(map, String.t(), any) :: binary | tuple
-  def get_emotion(review, text, callback) when text != "" do
+  @spec get_emotion(String.t(), function) :: binary | tuple
+  def get_emotion(text, callback) when text != "" do
     api_key = Application.get_env(:app_vars, :pdots_api_key)
     headers = [{"Content-Type", "application/x-www-form-urlencoded"}]
     {:ok, conn} = Mint.HTTP.connect(:http, "apis.paralleldots.com", 80)
@@ -30,21 +24,17 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
     receive do
       message ->
         {:ok, conn, responses} = Mint.HTTP.stream(conn, message)
-        IO.inspect responses
         [_, _,{:data, _req, emotions}, _] = responses
+        max_emotion = emotions
         |> Poison.decode!
         |> get_max_emotion
+        callback.(max_emotion)
         Mint.HTTP.close conn
-        callback.(review, emotions)
     end
   end
 
   defp get_max_emotion(%{"emotion" => emotions}) do
     Enum.max_by(emotions, &(elem(&1, 1)))
     |> elem(0)
-  end
-
-  defp get_max_emotion(_error) do
-    {:error, :paralleldots_error}
   end
 end
