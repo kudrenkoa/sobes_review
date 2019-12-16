@@ -1,6 +1,6 @@
 defmodule SobesReview.Repo do
   import Ecto.Query, only: [from: 2]
-  alias SobesReview.{Emotion, Review, City}
+  alias SobesReview.{Emotion, Review, City, Review_City, Review_Emotion, Review_Gender, Review_Month, Review_Time}
 
   use Ecto.Repo,
     otp_app: :sobes_review,
@@ -60,5 +60,27 @@ defmodule SobesReview.Repo do
 
   defp check_review_insert({:error, handler}) do
     {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
+  end
+
+  @spec get_stream_review_all(:gender | :city | :emotion | :month | :month | :time) ::
+          {:error, :undefined_view_type} | Stream.t()
+  def get_stream_review_all(view_type) do
+    view_type |>
+    get_view_type
+    |> case do
+      {:error, _descr} = error -> error
+      view -> stream(from r in view, select: r)
+    end
+  end
+
+  defp get_view_type(d) do
+    case d do
+      :gender -> Review_Gender
+      :city -> Review_City
+      :emotion -> Review_Emotion
+      :month -> Review_Month
+      :time -> Review_Time
+      _ -> {:error, :undefined_view_type}
+    end
   end
 end
