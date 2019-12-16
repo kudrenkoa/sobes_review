@@ -32,15 +32,15 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     city.id
   end
 
-  def update_review_city({:ok, review}, city_id) do
+  defp update_review_city({:ok, review}, city_id) do
     Repo.update_review_city(review, city_id)
   end
 
-  def update_review_city({:error, _error} = error, _city_id) do
+  defp update_review_city({:error, _error} = error, _city_id) do
     error
   end
 
-  def get_emotion_async({:ok, review}, text) do
+  defp get_emotion_async({:ok, review}, text) do
     PdotsClient.get_emotion_async(text, &(
       &1
       |> Cache.get_emotion_id
@@ -49,16 +49,16 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     {:ok, review}
   end
 
-  def get_emotion_async({:error, _err} = error, _text) do
+  defp get_emotion_async({:error, _err} = error, _text) do
     error
   end
 
-  def increment_review_count({:ok, _review} = message) do
+  defp increment_review_count({:ok, _review} = message) do
     Cache.increment_reviews_count()
     message
   end
 
-  def increment_review_count({:error, _err} = error) do
+  defp increment_review_count({:error, _err} = error) do
     error
   end
 end

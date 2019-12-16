@@ -1,7 +1,9 @@
 defmodule SobesReviewWeb.Utils.PdotsClient do
-  @callback emotion_callback(String.t) :: any
   @moduledoc """
   Represents methods for getting emotions from text via apis.paralleldots.com
+  """
+  @doc """
+  Spawns get_emotion in new process, returns pid of new process
   """
   @spec get_emotion_async(String.t, function) :: any
   def get_emotion_async(text, callback) do
@@ -10,10 +12,10 @@ defmodule SobesReviewWeb.Utils.PdotsClient do
 
   @doc """
   Sends post request to apis.paralleldots.com/v4/emotion with text,
-  receives all emotions response and returns max emotion by value or
-  error tuple %{"code" => code, "message" => message }
+  receives all emotions response and calls callback function with max emotion by value
   ## Examples
-
+  iex> get_emotion("very nice!", &(IO.puts(&1)))
+  "Happy"
   """
   @spec get_emotion(String.t(), function) :: binary | tuple
   def get_emotion(text, callback) when text != "" do

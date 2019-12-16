@@ -4,7 +4,7 @@ defmodule SobesReviewWeb.Utils.Cache do
   """
 
   @doc """
-  initializes empty tables for cities and countries in ets and return its names in tuple
+  initializes empty tables for cities, counters and emotions in :ets and returns its names in tuple
   ## Examples
   iex> init_repo(%{reviews_count: 123})\n
   {:cities, :counters}
@@ -19,8 +19,8 @@ defmodule SobesReviewWeb.Utils.Cache do
   end
 
   @doc """
-  initializes two empty tables :counters and :cities,
-  tnen adds review count and all cities to that tables
+  initializes empty tables :counters, :cities and :emotions,
+  tnen inserts data to them. Returns names of the tables
   """
   @spec init_repo(integer, list, list) :: tuple
   def init_repo(review_count, cities, emotions) when review_count >= 0 do
@@ -43,21 +43,36 @@ defmodule SobesReviewWeb.Utils.Cache do
     :ets.new(name, params)
   end
 
+  @doc """
+  Gets city id from :cities table if exists. else returns nil
+  ## Examples
+  iex> get_city_id_by_name "London"
+  12
+  iex> get_city_id_by_name "not existing city"
+  nil
+  """
   def get_city_id_by_name(name) do
     case :ets.lookup(:cities, name) do
       [{_name, id}] -> id
       [] -> nil
     end
   end
-
+  @doc """
+  Inserts city into a :cities table. returns city
+  """
   def insert_city(city) do
     :ets.insert(:cities, {city.name, city.id})
     city
   end
 
+  @doc """
+  Lookups :emotions table for emotion, returns id or nil
+  """
   def get_emotion_id(emotion) do
-    [{_name, id}] = :ets.lookup(:emotions, emotion)
-    id
+    case :ets.lookup(:emotions, emotion) do
+      [{_name, id}] -> id
+      _ -> nil
+    end
   end
 
   defp insert_emotion(id, name) do
@@ -92,25 +107,4 @@ defmodule SobesReviewWeb.Utils.Cache do
   def increment_reviews_count() do
     :ets.update_counter(:counters, "reviews", 1)
   end
-
-  @doc """
-  Just like increment_reviews_count/0, but returns incoming data
-  It's used only for contract in reports_controller
-
-  ## Examples
-  iex> increment_reviews_count({:ok, 123})\n
-  {:ok, 123}
-  iex> increment_reviews_count({:error, :no_file})\n
-  {:error, :no_file}
-  """
-  @spec increment_reviews_count({:ok|:error, any}) :: {:ok|:error, any}
-  def increment_reviews_count({:ok, _} = data) do
-    :ets.update_counter(:counters, "reviews", 1)
-    data
-  end
-
-  def increment_reviews_count({:error, _} = error_data) do
-    error_data
-  end
-
 end
