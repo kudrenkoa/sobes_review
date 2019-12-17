@@ -3,6 +3,7 @@ defmodule SobesReviewWeb.ReportsController do
   import SobesReviewWeb.Utils.Csv, only: [decode: 1]
   import SobesReviewWeb.Utils.Validators, only: [validate_decoded_data: 1]
   import SobesReviewWeb.Utils.ReviewsService, only: [create_review: 1]
+  import SobesReviewWeb.Utils.ReviewSerializerBridge, only: [create_report: 1]
 
   def create(conn, %{"upload" => %Plug.Upload{}=upload}) do
     upload.path
@@ -12,8 +13,13 @@ defmodule SobesReviewWeb.ReportsController do
     |> render_response(conn)
   end
 
-  def get(conn, %{"group_by" => _group_by, "type" => _type} = _params) do
-    redirect(conn, to: "/")
+  def get(conn, %{"group_by" => group_by, "type" => type = "html"} = _params) do
+    
+    {res, report} = create_report({String.to_atom(group_by), String.to_atom(type)})
+    case res do
+      :ok -> html(conn, report)
+      :error -> html(conn, "error occured")
+    end
   end
 
   def render_response({:ok, _data}, conn) do

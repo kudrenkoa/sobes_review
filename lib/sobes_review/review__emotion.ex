@@ -5,14 +5,11 @@ defmodule SobesReview.Review_Emotion do
   schema "mv_review_emotion" do
     field :emotion, :string
     field :text, :string
-
-    timestamps()
   end
 
-  @doc false
-  def changeset(review__emotion, attrs) do
-    review__emotion
-    |> cast(attrs, [:text, :emotion])
-    |> validate_required([:text, :emotion])
+  def fetch(review, accessor) do
+    case accessor do
+      :emotion -> {:ok, review.emotion}
+    end
   end
 end

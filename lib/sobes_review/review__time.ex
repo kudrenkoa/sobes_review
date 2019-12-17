@@ -5,14 +5,11 @@ defmodule SobesReview.Review_Time do
   schema "mv_review_time" do
     field :text, :string
     field :time, :string
-
-    timestamps()
   end
 
-  @doc false
-  def changeset(review__time, attrs) do
-    review__time
-    |> cast(attrs, [:text, :time])
-    |> validate_required([:text, :time])
+  def fetch(review, accessor) do
+    case accessor do
+      :time -> {:ok, review.time}
+    end
   end
 end

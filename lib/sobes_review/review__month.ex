@@ -3,16 +3,13 @@ defmodule SobesReview.Review_Month do
   import Ecto.Changeset
 
   schema "mv_review_month" do
-    field :month, :integer
+    field :month, :string
     field :text, :string
-
-    timestamps()
   end
 
-  @doc false
-  def changeset(review__month, attrs) do
-    review__month
-    |> cast(attrs, [:text, :month])
-    |> validate_required([:text, :month])
+  def fetch(review, accessor) do
+    case accessor do
+      :month -> {:ok, "#{review.month}"}
+    end
   end
 end
