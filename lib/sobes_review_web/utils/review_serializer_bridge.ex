@@ -19,12 +19,6 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
     |> Enum.reduce("", fn key, acc -> ReviewSerializer.get_table(:html, key, data[key]) <> acc end)
   end
 
-  def fff(data) do
-    data
-    |> Map.keys
-    |> Enum.reduce("", fn key, acc -> ReviewSerializer.get_table(:html, key, data[key]) <> acc end)
-  end
-
   defp create_excel_report(_selector, _stream) do
 
   end
