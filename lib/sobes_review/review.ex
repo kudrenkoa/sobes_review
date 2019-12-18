@@ -12,6 +12,16 @@ defmodule SobesReview.Review do
     timestamps()
   end
 
+  # def fetch(review, accessor) do
+  #   case accessor do
+  #     "gender" -> {:ok, review.gender}
+  #     "city" -> {:ok, review.city.name}
+  #     "emotion" -> {:ok, review.emition.name}
+  #     "month" -> {:ok, review.datetime.month}
+  #     "time" -> {:ok, "#{review.datetime.hour}:#{review.datetime.minute}"}
+  #   end
+  # end
+
   @doc false
   def changeset(review, attrs) do
     review

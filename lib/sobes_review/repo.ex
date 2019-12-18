@@ -1,11 +1,11 @@
 defmodule SobesReview.Repo do
   import Ecto.Query, only: [from: 2]
-  alias SobesReview.{Emotion, Review, City}
+  alias SobesReview.{Emotion, Review, City, Review_City, Review_Emotion,
+    Review_Gender, Review_Month, Review_Time}
 
   use Ecto.Repo,
     otp_app: :sobes_review,
     adapter: Ecto.Adapters.Postgres
-
 
   @spec get_all_cities :: list
   def get_all_cities() do
@@ -60,5 +60,25 @@ defmodule SobesReview.Repo do
 
   defp check_review_insert({:error, handler}) do
     {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
+  end
+
+  def start_transaction_with_callback(opts, callback) do
+    opts.group_by |>
+    get_view_type
+    |> case do
+      {:error, _descr} = error -> error
+      view -> transaction(fn -> callback.(opts, stream(from r in view, select: r)) end)
+    end
+  end
+
+  defp get_view_type(d) do
+    case d do
+      :gender -> Review_Gender
+      :city -> Review_City
+      :emotion -> Review_Emotion
+      :month -> Review_Month
+      :time -> Review_Time
+      _ -> {:error, :undefined_view_type}
+    end
   end
 end
