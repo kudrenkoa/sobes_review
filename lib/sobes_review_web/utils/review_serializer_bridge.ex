@@ -17,7 +17,7 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
     data |> Map.keys
     |> Enum.reduce(serializer.start_value(), fn key, acc ->
       serializer.header(key, data[key])
-      |> serializer.append_result(acc) end)
+      |> serializer.join_serialized_values(acc) end)
   end
 
   defp get_serializer(options) do
