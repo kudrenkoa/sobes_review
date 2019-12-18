@@ -4,8 +4,9 @@ defmodule SobesReviewWeb.ReportsController do
   import SobesReviewWeb.Utils.Validators, only: [validate_decoded_data: 1]
   import SobesReviewWeb.Utils.ReviewsService, only: [create_review: 1]
   import SobesReviewWeb.Utils.ReviewSerializerBridge, only: [create_report: 1]
+  alias SobesReviewWeb.Utils.SerializerOptions
 
-  def create(conn, %{"upload" => %Plug.Upload{}=upload}) do
+  def create(conn, %{"upload" => %Plug.Upload{} = upload}) do
     upload.path
     |> decode
     |> validate_decoded_data
@@ -14,8 +15,8 @@ defmodule SobesReviewWeb.ReportsController do
   end
 
   def get(conn, %{"group_by" => group_by, "type" => type = "html"} = _params) do
-    
-    {res, report} = create_report({String.to_atom(group_by), String.to_atom(type)})
+    {res, report} = create_report(%SerializerOptions{group_by: String.to_atom(group_by), type: String.to_atom(type)})
+    # {res, report} = create_report({String.to_atom(group_by), String.to_atom(type)})
     case res do
       :ok -> html(conn, report)
       :error -> html(conn, "error occured")

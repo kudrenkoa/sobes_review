@@ -1,6 +1,5 @@
 defmodule SobesReview.Review_Time do
   use Ecto.Schema
-  import Ecto.Changeset
 
   schema "mv_review_time" do
     field :text, :string

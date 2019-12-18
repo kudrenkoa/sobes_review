@@ -1,6 +1,5 @@
 defmodule SobesReview.Review_Emotion do
   use Ecto.Schema
-  import Ecto.Changeset
 
   schema "mv_review_emotion" do
     field :emotion, :string

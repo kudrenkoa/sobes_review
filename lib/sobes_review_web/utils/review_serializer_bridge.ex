@@ -1,35 +1,38 @@
 defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
+  @moduledoc false
   import SobesReview.Repo, only: [start_transaction_with_callback: 2]
-  alias SobesReviewWeb.Utils.ReviewSerializer
-  
-  @spec create_report({:gender | :city | :emotion | :month | :month | :time,
-    :html | :xls}) :: {:ok | :error, binary}
-  def create_report({group_by, type}) do
-    create_report = case type do
-      :html -> &create_html_report/2
-      :xls -> &create_excel_report/2
-    end
-    group_by
-    |> start_transaction_with_callback(create_report)
+  alias SobesReviewWeb.Utils.SerializerOptions
+  alias SobesReviewWeb.Utils.Serializers.{Html}
+
+  @spec create_report(SerializerOptions) :: {:ok | :error, binary}
+  def create_report(opts) do
+    start_transaction_with_callback(opts, &generate_report/2)
   end
 
-  defp create_html_report(selector, stream) do
-    data = Enum.reduce(stream, %{}, fn(review, acc) -> append_result(acc, review[selector], review) end)
+  @spec generate_report(SerializerOptions.t(), Stream) :: String.t()
+  defp generate_report(opts, stream) do
+    serializer = get_serializer(opts)
+    data = Enum.reduce(stream, %{}, fn(review, acc) ->
+      append_result(acc, review[opts.group_by], serializer.one(review), serializer) end)
     data |> Map.keys
-    |> Enum.reduce("", fn key, acc -> ReviewSerializer.get_table(:html, key, data[key]) <> acc end)
+    |> Enum.reduce(serializer.start_value(), fn key, acc ->
+      serializer.header(key, data[key])
+      |> serializer.append_result(acc) end)
   end
 
-  defp create_excel_report(_selector, _stream) do
-
-  end
-
-  defp append_result(res, key, review) do
-    res = if !Map.has_key?(res, key) do
-      Map.put(res, key, "")
-    else res
+  defp get_serializer(options) do
+    case options.type do
+      :html -> Html
     end
-    {_, res} = Map.get_and_update(res, key,
-      fn(prev_val) -> {"", prev_val <> ReviewSerializer.serialize_review(:html, review)} end)
-    res
+  end
+
+  defp append_result(result_map, group_by_key, value, serializer) do
+    result_map = if !Map.has_key?(result_map, group_by_key) do
+      Map.put(result_map, group_by_key, serializer.start_value())
+    else result_map
+    end
+    {_, result_map} = Map.get_and_update(result_map, group_by_key,
+      fn(prev_val) -> {serializer.start_value(), serializer.append_result(value, prev_val)} end)
+      result_map
   end
 end

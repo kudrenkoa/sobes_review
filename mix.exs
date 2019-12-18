@@ -46,7 +46,7 @@ defmodule SobesReview.MixProject do
       {:nimble_csv, "~> 0.6"},
       {:castore, "~> 0.1.0"},
       {:mint, "~> 1.0"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
     ]
   end
 

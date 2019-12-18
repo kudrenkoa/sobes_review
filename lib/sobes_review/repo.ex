@@ -62,14 +62,12 @@ defmodule SobesReview.Repo do
     {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
   end
 
-  @spec start_transaction_with_callback(:gender | :city | :emotion | :month | :month | :time, fun) ::
-          {:error, :undefined_view_type} | Stream.t()
-  def start_transaction_with_callback(view_type, callback) do
-    view_type |>
+  def start_transaction_with_callback(opts, callback) do
+    opts.group_by |>
     get_view_type
     |> case do
       {:error, _descr} = error -> error
-      view -> transaction(fn -> callback.(view_type, stream(from r in view, select: r)) end)
+      view -> transaction(fn -> callback.(opts, stream(from r in view, select: r)) end)
     end
   end
 
