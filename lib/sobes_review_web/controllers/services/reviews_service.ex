@@ -2,6 +2,7 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   alias SobesReviewWeb.Utils.PdotsClient
   alias SobesReview.Repo
   alias SobesReviewWeb.Utils.Cache
+  alias SobesReviewWeb.Utils.SerializerOptions
 
   def create_review({:ok, attrs}) do
     city_id = get_or_create_city(attrs)
@@ -14,6 +15,10 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
 
   def create_review({:error, _err} = error) do
     error
+  end
+
+  def init_serializer_options(group_by, type) do
+    %SerializerOptions{group_by: String.to_atom(group_by), type: String.to_atom(type)}
   end
 
   defp get_or_create_city(attrs) do

@@ -1,4 +1,4 @@
-defmodule SobesReviewWeb.ReviewController do
+defmodule SobesReviewWeb.PageController do
   use SobesReviewWeb, :controller
   import SobesReviewWeb.Utils.Cache, only: [get_reviews_count: 0]
 

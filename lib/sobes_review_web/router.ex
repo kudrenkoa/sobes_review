@@ -15,7 +15,7 @@ defmodule SobesReviewWeb.Router do
 
   scope "/", SobesReviewWeb do
     pipe_through :browser
-    get "/", ReviewController, :index
+    get "/", PageController, :index
     post "/reports", ReportsController, :create
     get "/reports/:group_by/:type", ReportsController, :get
   end
