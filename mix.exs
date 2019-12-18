@@ -47,6 +47,7 @@ defmodule SobesReview.MixProject do
       {:castore, "~> 0.1.0"},
       {:mint, "~> 1.0"},
       {:poison, "~> 3.1"},
+      {:elixlsx, "~> 0.4.2"}
     ]
   end
 

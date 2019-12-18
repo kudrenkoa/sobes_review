@@ -8,6 +8,8 @@ defmodule SobesReviewWeb.ReportsView do
       :empty_file -> "Your file is empty"
       :no_review_text -> "\"Text\" field is empty"
       :paralleldots_error -> "Internal server error: Paralleldots api returned error. Try again later"
+      :server_error -> "Internal server error: Paralleldots api returned error. Try again later"
+      error -> error
     end
   end
 end

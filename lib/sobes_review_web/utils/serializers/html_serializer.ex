@@ -10,7 +10,7 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
   iex> Html.one(%Review{id: 123, text: "super good!"})
   "<tr><td>123</td><td>super good!</td></tr>"
   """
-  @spec one(map) :: binary
+  @spec one(%{id: any, text: any}) :: binary
   def one(review) do
     "<tr><td>#{review.id}</td><td>#{review.text}</td></tr>"
   end
@@ -23,8 +23,8 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
   "<h1>Tokyo</h1><table><tr><td>123</td><td>super good!</td></tr></table>"
   """
   @spec header(binary, binary) :: binary
-  def header(header, inner_parts) do
-    "<h1>#{header}</h1><table>#{inner_parts}</table>"
+  def header(title, inner_parts) do
+    "<h1>#{title}</h1><table>#{inner_parts}</table>"
   end
 
   @doc """
@@ -53,6 +53,10 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
     value <> result
   end
 
+  def update_value(new_value, serialized_value) do
+    new_value <> serialized_value
+  end
+
   @doc """
   Creates start value of map data, that is specific for current serializer.
   For html serializer it is empty string.
@@ -66,5 +70,13 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
   @spec map_start_value :: <<>>
   def map_start_value do
     ""
+  end
+
+  @doc """
+  Used for updating serialized data.
+  Html serializer just passed this data out
+  """
+  def prepare_result(data) do
+    data
   end
 end

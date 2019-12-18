@@ -17,12 +17,12 @@
     <select class="browser-default" onchange="updateGetForm(this, 'review_type')">
       <option value="" disabled selected>Choose your option</option>
       <option value="html">Html</option>
-      <option value="xls">Excel</option>
+      <option value="xlsx">Excel</option>
     </select>
   </div>
 </div>
 <form action="/reports", id="get_reports_form" method="GET">
-  <button class="btn waves-effect waves-light btn-large teal lighten-1" 
+  <button class="btn waves-effect waves-light btn-large teal lighten-1"
     id="get_reviews_btn" type="submit" disabled="">Get reviews
       <i class="material-icons right">cloud_download</i>
   </button>
