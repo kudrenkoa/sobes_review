@@ -36,3 +36,5 @@ config :sobes_review, SobesReviewWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+config :app_vars,
+  pdots_api_key: "SHpqtAfuqzuKAWpTvUw47fQ2o1cxmjKgEgvLJe9Jvqs"
