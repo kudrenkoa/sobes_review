@@ -13,10 +13,10 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-    './js/materialize.min.js': glob.sync('./vendor/**/*.js').concat(['./js/materialize.min.js'])
+    './js/app.js': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
   },
   output: {
-    filename: 'materialize.min.js',
+    filename: 'app.js',
     path: path.resolve(__dirname, '../priv/static/js')
   },
   module: {
@@ -35,7 +35,7 @@ module.exports = (env, options) => ({
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ filename: '../css/materialize.min.css' }),
+    new MiniCssExtractPlugin({ filename: '../css/app.css' }),
     new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
   ]
 });
