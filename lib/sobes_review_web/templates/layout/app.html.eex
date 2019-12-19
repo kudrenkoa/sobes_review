@@ -13,15 +13,23 @@
       <div class="nav-wrapper cyan darken-4">
         <a href="/" class="brand-logo" style="padding-left: 35px;">Review App</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <!-- <li><%= link "Report example", to: "/files/example.csv" %></li> -->
           <li><a href="https://github.com/kudrenkoa/sobes_review">Github</a></li>
         </ul>
       </div>
     </nav>
   <div class="container">
-  <br>
-    <br>
-    <%= render @view_module, @view_template, assigns %>
+    <div class="section">
+      <div class="card-panel">
+        <h5>Download <%= link "this review", to: "/files/example.csv"%> example if you have troubles with uploading your review</h5>
+
+      </div>
+    </div>
+    <div class="section">
+      <%= render @view_module, @view_template, assigns %>
+    </div>
   </div>
+  
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/index.js") %>"></script>
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/materialize.min.js") %>"></script>
 </body>

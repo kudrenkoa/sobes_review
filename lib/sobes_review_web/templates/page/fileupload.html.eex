@@ -1,4 +1,3 @@
-<h5>Upload your review</h5>
 <br>
 <%= form_for @conn, Routes.reports_path(@conn, :create), [multipart: true], fn f-> %>
   <div class="file-field input-field">

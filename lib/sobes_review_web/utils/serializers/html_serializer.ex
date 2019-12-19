@@ -50,7 +50,7 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
   """
   @spec join_serialized_values(binary, binary) :: binary
   def join_serialized_values(value, result) do
-    value <> result
+    result <> value
   end
 
   def update_value(new_value, serialized_value) do

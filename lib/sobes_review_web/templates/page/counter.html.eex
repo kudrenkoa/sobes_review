@@ -1,2 +1,2 @@
 <h5>Count</h5>
-<h2><%= @count %></h2>
+<h3><%= @count %></h3>
