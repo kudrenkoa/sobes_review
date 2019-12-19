@@ -81,4 +81,11 @@ defmodule SobesReview.Repo do
       _ -> {:error, :undefined_view_type}
     end
   end
+
+  @doc """
+  Calls update_mat_views() procedure for refreshing all materialized views
+  """
+  def refresh_views() do
+    Ecto.Adapters.SQL.query(SobesReview.Repo, "call update_mat_views()")
+  end
 end

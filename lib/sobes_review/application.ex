@@ -22,6 +22,7 @@ defmodule SobesReview.Application do
     opts = [strategy: :one_for_one, name: SobesReview.Supervisor]
     sv = Supervisor.start_link(children, opts)
     init_cache()
+    # start_refresh_views_process(20000)
     sv
   end
 
@@ -34,5 +35,15 @@ defmodule SobesReview.Application do
 
   def init_cache() do
     init_repo(get_reviews_count(), get_all_cities(), get_all_emotions())
+  end
+
+  defp start_refresh_views_process(sleep_secs) do
+    spawn(fn -> refresh_views(sleep_secs) end)
+  end
+
+  defp refresh_views(sleep_secs) do
+    Process.sleep(sleep_secs)
+    SobesReview.Repo.refresh_views
+    refresh_views(sleep_secs)
   end
 end
