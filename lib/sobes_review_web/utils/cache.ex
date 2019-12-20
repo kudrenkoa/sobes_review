@@ -12,10 +12,9 @@ defmodule SobesReviewWeb.Utils.Cache do
   @spec init_repo() :: tuple
   def init_repo() do
     params = [:set, :public, :named_table]
-    cities_table_name = init_table :cities, params
-    counters_table_name = init_table :counters, params
-    emotions_table_name = init_table :emotions, params
-    {cities_table_name, counters_table_name, emotions_table_name}
+    table_names = [:cities, :counters, :emotions, :reports]
+    Enum.each(table_names, &(init_table(&1, params)))
+    {:ok}
   end
 
   @doc """
@@ -24,11 +23,25 @@ defmodule SobesReviewWeb.Utils.Cache do
   """
   @spec init_repo(integer, list, list) :: tuple
   def init_repo(review_count, cities, emotions) when review_count >= 0 do
-    names = init_repo()
+    init_repo()
     :ets.insert(:counters, {"reviews", review_count })
     Enum.each(cities, &(insert_city(&1)))
     Enum.each(emotions, &(insert_emotion(&1.id, &1.name)))
-    names
+    {:ok}
+  end
+
+  def init_report_table_by_type(reports, type) do
+    # [type, reports_list] = :ets.lookup(:reports, type)
+    :ets.insert(:reports, {type, [reports]})
+  end
+
+  # def insert_report(report, type) do
+
+  # end
+
+  @spec get_reports_keys :: [:city | :emotion | :gender | :month | :time, ...]
+  def get_reports_keys() do
+    [:city, :emotion, :gender, :month, :time]
   end
 
   defp init_table(name, params) when is_atom(name) do

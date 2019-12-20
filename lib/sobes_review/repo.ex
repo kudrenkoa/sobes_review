@@ -17,6 +17,7 @@ defmodule SobesReview.Repo do
     one(from r in SobesReview.Review, select: count(r))
   end
 
+  @spec insert_review(map) :: {:error, binary} | {:ok, any}
   def insert_review(attrs) do
     %Review{}
     |> Review.changeset(attrs)
@@ -71,8 +72,8 @@ defmodule SobesReview.Repo do
     end
   end
 
-  defp get_view_type(d) do
-    case d do
+  defp get_view_type(select_type) do
+    case select_type do
       :gender -> Review_Gender
       :city -> Review_City
       :emotion -> Review_Emotion
@@ -87,5 +88,9 @@ defmodule SobesReview.Repo do
   """
   def refresh_views() do
     Ecto.Adapters.SQL.query(SobesReview.Repo, "call update_mat_views()")
+  end
+
+  def preload_review_deps(review) do
+    review |> preload(:city) |> preload(:emotion)
   end
 end
