@@ -1,8 +1,16 @@
 defmodule SobesReviewWeb.Utils.Serialization do
+  @moduledoc """
+  Logic for reviews serialization
+  """
   alias Elixlsx.Sheet
   alias Elixlsx.Workbook
   alias SobesReviewWeb.Utils.UUID
 
+  @doc """
+  Serializes reports from cache by type. Returns result {:ok, res},
+  where res depends on type - String or excel workbook, stored in memory
+  """
+  @spec serialize_reports(map, :html | :xlsx) :: {:ok, String.t() | Elixlsx.Workbook.t()}
   def serialize_reports(cached_data, type) do
     res =
     cached_data

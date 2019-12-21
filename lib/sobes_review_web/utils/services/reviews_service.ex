@@ -1,9 +1,15 @@
 defmodule SobesReviewWeb.Utils.ReviewsService do
+  @moduledoc """
+  Main logic for ReportController. For example - creating new review
+  """
   alias SobesReviewWeb.Utils.PdotsClient
   alias SobesReview.Repo
   alias SobesReviewWeb.Utils.Cache
   alias SobesReviewWeb.Utils.SerializerOptions
 
+  @doc """
+  Creates new review, updates it with city_id, collect emotion from paralleldots api and increments review counter
+  """
   def create_review({:ok, attrs}) do
     city_id = get_or_create_city(attrs)
     attrs
@@ -17,6 +23,7 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     error
   end
 
+  @spec init_serializer_options(String.t, String.t) :: SobesReviewWeb.Utils.SerializerOptions.t()
   def init_serializer_options(group_by, type) do
     %SerializerOptions{group_by: String.to_atom(group_by), type: String.to_atom(type)}
   end

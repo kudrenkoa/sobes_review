@@ -1,21 +1,22 @@
 defmodule SobesReviewWeb.ReportsController do
   use SobesReviewWeb, :controller
-  import SobesReviewWeb.Utils.Csv, only: [decode: 1]
-  import SobesReviewWeb.Utils.Validators, only: [validate_decoded_data: 1]
-  import SobesReviewWeb.Utils.ReviewsService, only: [create_review: 1, init_serializer_options: 2]
-  import SobesReviewWeb.Utils.ReviewSerializerBridge, only: [create_report: 1, create_report_from_cache: 1]
+
+  alias SobesReviewWeb.Utils.Csv
+  alias SobesReviewWeb.Utils.Validators
+  alias SobesReviewWeb.Utils.ReviewsService
+  alias SobesReviewWeb.Utils.ReviewSerializerBridge
 
   def create(conn, %{"upload" => %Plug.Upload{} = upload}) do
     upload.path
-    |> decode
-    |> validate_decoded_data
-    |> create_review
+    |> Csv.decode
+    |> Validators.validate_decoded_data
+    |> ReviewsService.create_review
     |> render_response(conn)
   end
 
   def get(conn, %{"group_by" => group_by, "type" => type} = _params) do
-    options = init_serializer_options(group_by, type)
-    {res, report} = create_report_from_cache(options)
+    options = ReviewsService.init_serializer_options(group_by, type)
+    {res, report} = ReviewSerializerBridge.create_report_from_cache(options)
     case res do
       :ok -> send_chunked_report(conn, report, options)
       :error -> render_response({:error, :server_error}, conn)

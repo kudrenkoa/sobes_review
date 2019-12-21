@@ -4,7 +4,6 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
   """
   import SobesReview.Repo, only: [start_transaction_with_callback: 2]
   alias SobesReviewWeb.Utils.SerializerOptions
-  # alias SobesReviewWeb.Utils.Serializers.{Html, Xlsx}
   alias SobesReviewWeb.Utils.Cache
   alias SobesReviewWeb.Utils.Serialization
 

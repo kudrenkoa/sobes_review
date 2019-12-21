@@ -30,17 +30,31 @@ defmodule SobesReviewWeb.Utils.Cache do
     {:ok}
   end
 
+  @doc """
+  Inserts reports by reports type to :ets
+
+  ## Examples
+  iex> init_report_table_by_type([%{}, %{}], :city)
+  :ok
+  """
   def init_report_table_by_type(reports, type) do
-    # [type, reports_list] = :ets.lookup(:reports, type)
     :ets.insert(:reports, {type, [reports]})
   end
 
+  @doc """
+  Adds data from review into reports tables. Returns review by itself
+  """
   def insert_report(review) do
+    lock = Mutex.await(CacheMutex, review.id)
     Enum.each(get_reports_keys(), fn key ->
       insert_into_reports_table(key, review.id, review.text, review[key]) end)
+    Mutex.release(MyMutex, lock)
     review
   end
 
+  @doc """
+  adds new data into reports table
+  """
   defp insert_into_reports_table(type, id, text, value) do
     reports_map = get_reports_by_type(type)
     {_, reports_map} = reports_map
@@ -49,6 +63,9 @@ defmodule SobesReviewWeb.Utils.Cache do
     :ets.insert(:reports, {type, reports_map})
   end
 
+  @doc """
+  return add data from reports by specific type
+  """
   def get_reports_by_type(type) do
     :ets.lookup(:reports, type)
     |> case do
@@ -56,6 +73,7 @@ defmodule SobesReviewWeb.Utils.Cache do
       [{_, res}] -> res
     end
   end
+
   defp init_map_key_if_not_exists(map, key) do
     if Map.get(map, key) do
       map

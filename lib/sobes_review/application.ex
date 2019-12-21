@@ -11,16 +11,15 @@ defmodule SobesReview.Application do
       # Start the Ecto repository
       SobesReview.Repo,
       # Start the endpoint when the application starts
-      SobesReviewWeb.Endpoint
+      SobesReviewWeb.Endpoint,
+      {Mutex, name: CacheMutex, meta: "mutex string"}
       # Starts a worker by calling: SobesReview.Worker.start_link(arg)
       # {SobesReview.Worker, arg},
     ]
-
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SobesReview.Supervisor]
     sv = Supervisor.start_link(children, opts)
-
     CacheInitter.init_cache()
     sv
   end
