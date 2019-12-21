@@ -52,9 +52,8 @@ defmodule SobesReviewWeb.Utils.Cache do
     review
   end
 
-  @doc """
-  adds new data into reports table
-  """
+
+  # adds new data into reports table
   defp insert_into_reports_table(type, id, text, value) do
     reports_map = get_reports_by_type(type)
     {_, reports_map} = reports_map
@@ -127,8 +126,13 @@ defmodule SobesReviewWeb.Utils.Cache do
   def get_emotion_id(emotion) do
     case :ets.lookup(:emotions, emotion) do
       [{_name, id}] -> id
-      _ -> nil
+      _ -> get_undefined_emotion()
     end
+  end
+
+  defp get_undefined_emotion() do
+    [{_, id}] = :ets.lookup(:emotions, "undef")
+    id
   end
 
   defp insert_emotion(id, name) do

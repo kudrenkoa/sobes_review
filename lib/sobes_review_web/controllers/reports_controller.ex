@@ -16,14 +16,12 @@ defmodule SobesReviewWeb.ReportsController do
 
   def get(conn, %{"group_by" => group_by, "type" => type} = _params) do
     options = ReviewsService.init_serializer_options(group_by, type)
-    {res, report} = ReviewSerializerBridge.create_report_from_cache(options)
-    case res do
-      :ok -> send_chunked_report(conn, report, options)
-      :error -> render_response({:error, :server_error}, conn)
-    end
+    ReviewSerializerBridge.create_report_from_cache(options)
+    |> handle_report_result(conn, options)
   end
 
-  defp send_chunked_report(conn, report, options) do
+
+  defp handle_report_result({:ok, report}, conn, options) do
     conn
     |> prepare_response(options)
     |> chunk(report)
@@ -31,6 +29,10 @@ defmodule SobesReviewWeb.ReportsController do
       {:ok, cn} -> cn
       {:error, err} = err -> render_response(err, conn)
     end
+  end
+
+  defp handle_report_result({:error, _err}, conn, _options) do
+    render_response({:error, :server_error}, conn)
   end
 
   defp prepare_response(conn, %{group_by: group_by, type: :html}) do
