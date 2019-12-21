@@ -38,6 +38,7 @@ defmodule SobesReviewWeb.Utils.Cache do
   def insert_report(review) do
     Enum.each(get_reports_keys(), fn key ->
       insert_into_reports_table(key, review.id, review.text, review[key]) end)
+    review
   end
 
   defp insert_into_reports_table(type, id, text, value) do

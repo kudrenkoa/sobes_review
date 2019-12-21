@@ -71,8 +71,8 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   defp refresh_views_async({:ok, review} = message) do
     SobesReview.Repo.refresh_views()
     review
-    |> SobesReview.Repo.preload_review_deps
     |> Cache.insert_report
+    |> SobesReview.Repo.preload_review_deps
     message
   end
 
