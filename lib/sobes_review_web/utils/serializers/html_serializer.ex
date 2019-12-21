@@ -79,4 +79,18 @@ defmodule SobesReviewWeb.Utils.Serializers.Html do
   def prepare_result(data) do
     data
   end
+
+  def serialize_cached_data(cached_data) do
+    cached_data
+    |> Map.keys
+    |> Enum.map(fn key -> serialize_cached_data(key, cached_data[key]) end)
+    |> Enum.join()
+  end
+
+  defp serialize_cached_data(title, values_list) do
+    serialized_data = Enum.map(values_list,
+      fn element -> "<tr><td>#{element.id}</td><td>#{element.text}</td></tr>" end)
+    |> Enum.join()
+    "<h1>#{title}</h1><table>#{serialized_data}</table>"
+  end
 end

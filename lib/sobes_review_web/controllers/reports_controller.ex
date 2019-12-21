@@ -3,7 +3,7 @@ defmodule SobesReviewWeb.ReportsController do
   import SobesReviewWeb.Utils.Csv, only: [decode: 1]
   import SobesReviewWeb.Utils.Validators, only: [validate_decoded_data: 1]
   import SobesReviewWeb.Utils.ReviewsService, only: [create_review: 1, init_serializer_options: 2]
-  import SobesReviewWeb.Utils.ReviewSerializerBridge, only: [create_report: 1]
+  import SobesReviewWeb.Utils.ReviewSerializerBridge, only: [create_report: 1, create_report_from_cache: 1]
 
   def create(conn, %{"upload" => %Plug.Upload{} = upload}) do
     upload.path
@@ -15,7 +15,7 @@ defmodule SobesReviewWeb.ReportsController do
 
   def get(conn, %{"group_by" => group_by, "type" => type} = _params) do
     options = init_serializer_options(group_by, type)
-    {res, report} = create_report(options)
+    {res, report} = create_report_from_cache(options)
     case res do
       :ok -> send_chunked_report(conn, report, options)
       :error -> render_response({:error, :server_error}, conn)

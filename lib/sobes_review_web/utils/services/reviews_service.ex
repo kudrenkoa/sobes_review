@@ -46,14 +46,12 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   end
 
   defp get_emotion_async({:ok, review}, text) do
-    IO.inspect(review)
     PdotsClient.get_emotion_async(text, &(
       &1
       |> Cache.get_emotion_id
       |> Repo.update_review_emotion(review)
       |> refresh_views_async
     ))
-    review |> SobesReview.Repo.preload_review_deps |> IO.inspect
     {:ok, review}
   end
 
@@ -70,8 +68,11 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     error
   end
 
-  defp refresh_views_async({:ok, _data} = message) do
+  defp refresh_views_async({:ok, review} = message) do
     SobesReview.Repo.refresh_views()
+    review
+    |> SobesReview.Repo.preload_review_deps
+    |> Cache.insert_report
     message
   end
 

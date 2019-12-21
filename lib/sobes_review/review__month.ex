@@ -8,7 +8,7 @@ defmodule SobesReview.Review_Month do
 
   def fetch(review, accessor) do
     case accessor do
-      :month -> {:ok, "#{review.month}"}
+      :month -> {:ok, review.month}
     end
   end
 end

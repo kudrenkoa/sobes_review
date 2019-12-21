@@ -4,11 +4,18 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
   """
   import SobesReview.Repo, only: [start_transaction_with_callback: 2]
   alias SobesReviewWeb.Utils.SerializerOptions
-  alias SobesReviewWeb.Utils.Serializers.{Html, Xlsx}
+  # alias SobesReviewWeb.Utils.Serializers.{Html, Xlsx}
+  alias SobesReviewWeb.Utils.Cache
+  alias SobesReviewWeb.Utils.Serialization
 
   @spec create_report(SerializerOptions.t()) :: {:ok | :error, binary}
   def create_report(opts = %SerializerOptions{}) do
     start_transaction_with_callback(opts, &generate_report/2)
+  end
+
+  def create_report_from_cache(opts) do
+    Cache.get_reports_by_type(opts.group_by)
+    |> Serialization.serialize_reports(opts.type)
   end
 
   defp generate_report(opts, stream) do
@@ -34,7 +41,6 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
     end
   end
 
-
   # Checks key in result map, if not - creates in result map this key with empty value, specialized by serializer type.
   # After that uses Map.get_and_update for updating existing map value with new one
   defp append_result(result_map, group_by_key, value, serializer) do
@@ -45,7 +51,6 @@ defmodule SobesReviewWeb.Utils.ReviewSerializerBridge do
 
     {_, result_map} = Map.get_and_update(result_map, group_by_key,
       fn(prev_val) -> {"", serializer.update_value(value, prev_val)} end)
-
     result_map
   end
 end

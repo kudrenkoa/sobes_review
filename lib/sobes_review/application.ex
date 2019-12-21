@@ -20,6 +20,7 @@ defmodule SobesReview.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SobesReview.Supervisor]
     sv = Supervisor.start_link(children, opts)
+
     CacheInitter.init_cache()
     sv
   end

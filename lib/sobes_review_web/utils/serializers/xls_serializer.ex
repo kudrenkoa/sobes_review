@@ -105,4 +105,16 @@ defmodule SobesReviewWeb.Utils.Serializers.Xlsx do
     {_, {_, data}} = Elixlsx.write_to_memory(workbook, name)
     data
   end
+
+  def serialize_cached_data(cached_data) do
+    cached_data
+    |> Map.keys
+    |> Enum.map(fn key -> serialize_cached_data(key, cached_data[key]) end)
+    |> Enum.reduce(%Workbook{}, fn el, accum -> Workbook.append_sheet(accum, el) end)
+  end
+
+  defp serialize_cached_data(title, values_list) do
+    rows = Enum.map(values_list, fn element -> [element.id, element.text] end)
+    %Sheet{name: title, rows: rows}
+  end
 end

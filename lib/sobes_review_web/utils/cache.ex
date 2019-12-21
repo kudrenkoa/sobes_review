@@ -35,9 +35,33 @@ defmodule SobesReviewWeb.Utils.Cache do
     :ets.insert(:reports, {type, [reports]})
   end
 
-  # def insert_report(report, type) do
+  def insert_report(review) do
+    Enum.each(get_reports_keys(), fn key ->
+      insert_into_reports_table(key, review.id, review.text, review[key]) end)
+  end
 
-  # end
+  defp insert_into_reports_table(type, id, text, value) do
+    reports_map = get_reports_by_type(type)
+    {_, reports_map} = reports_map
+    |> init_map_key_if_not_exists(value)
+    |> Map.get_and_update(value, fn val -> {val, [%{id: id, text: text} | val]} end)
+    :ets.insert(:reports, {type, reports_map})
+  end
+
+  def get_reports_by_type(type) do
+    :ets.lookup(:reports, type)
+    |> case do
+      [{_, [res]}] -> res
+      [{_, res}] -> res
+    end
+  end
+  defp init_map_key_if_not_exists(map, key) do
+    if Map.get(map, key) do
+      map
+    else
+      Map.put(map, key, [])
+    end
+  end
 
   @spec get_reports_keys :: [:city | :emotion | :gender | :month | :time, ...]
   def get_reports_keys() do
