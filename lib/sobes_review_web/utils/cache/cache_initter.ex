@@ -32,7 +32,6 @@ defmodule SobesReviewWeb.Utils.CacheInitter do
     {_ , result_map } = Map.get_and_update(result_map, review[selector], &(
       {"", [%{id: review.id, text: review.text} | &1 ]}
     ))
-
     result_map
   end
 end

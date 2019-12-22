@@ -22,7 +22,7 @@ defmodule SobesReviewWeb.Utils.Cache do
   tnen inserts data to them. Returns names of the tables
   """
   @spec init_repo(integer, list, list) :: tuple
-  def init_repo(review_count, cities, emotions) when review_count >= 0 do
+  def init_repo(review_count, cities, emotions) when review_count >= 0 and is_list(cities) and is_list(emotions) do
     init_repo()
     :ets.insert(:counters, {"reviews", review_count })
     Enum.each(cities, &(insert_city(&1)))
@@ -38,7 +38,7 @@ defmodule SobesReviewWeb.Utils.Cache do
   :ok
   """
   def init_report_table_by_type(reports, type) do
-    :ets.insert(:reports, {type, [reports]})
+    :ets.insert(:reports, {type, reports})
   end
 
   @doc """
@@ -66,11 +66,8 @@ defmodule SobesReviewWeb.Utils.Cache do
   return add data from reports by specific type
   """
   def get_reports_by_type(type) do
-    :ets.lookup(:reports, type)
-    |> case do
-      [{_, [res]}] -> res
-      [{_, res}] -> res
-    end
+    [{_, res}] = :ets.lookup(:reports, type)
+    res
   end
 
   defp init_map_key_if_not_exists(map, key) do
@@ -115,7 +112,7 @@ defmodule SobesReviewWeb.Utils.Cache do
   @doc """
   Inserts city into a :cities table. returns city
   """
-  def insert_city(city) do
+  def insert_city(city) when is_map(city) do
     :ets.insert(:cities, {city.name, city.id})
     city
   end
