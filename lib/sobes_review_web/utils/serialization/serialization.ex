@@ -38,7 +38,7 @@ defmodule SobesReviewWeb.Utils.Serialization do
   end
 
   defp serialize_to(data, :xlsx) do
-    {_, {_, data}} =
+    {_ok, {_name, data}} =
     Enum.reduce(data, %Workbook{}, fn el,
       accum -> Workbook.append_sheet(accum, el) end)
     |> Elixlsx.write_to_memory("/tmp/#{UUID.generate()}.xlsx")

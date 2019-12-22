@@ -85,6 +85,4 @@ defmodule SobesReviewWeb.CacheTest do
       assert data.id == @valid_review.id and data.text == @valid_review.text
     end
   end
-
-
 end
