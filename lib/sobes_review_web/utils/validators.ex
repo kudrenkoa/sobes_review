@@ -7,7 +7,7 @@ defmodule SobesReviewWeb.Utils.Validators do
           {:error, any} | {:ok, atom | %{text: any}}
   def validate_decoded_data({:ok, attrs} = data) do
     cond do
-      attrs.text == "" or attrs.city == "" -> {:error, :invalid_data}
+      attrs.text == "" or attrs.name == "" or attrs.name == nil or attrs.datetime <= 0 -> {:error, :invalid_data}
       true -> data
     end
   end
