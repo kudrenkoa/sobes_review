@@ -11,7 +11,9 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   Creates new review, updates it with city_id, collect emotion from paralleldots api and increments review counter
   """
   def create_review({:ok, attrs}) do
-    get_or_create_city(attrs)
+    ct = get_or_create_city(attrs)
+    IO.inspect(ct)
+    ct
     |> create_review_with_city(attrs)
   end
 
@@ -49,8 +51,9 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
     |> insert_city_to_cache
   end
 
-  defp insert_city_to_cache({:ok, city}) do
+  defp insert_city_to_cache({:ok, city} = msg) do
     Cache.insert_city(city)
+    msg
   end
 
   defp insert_city_to_cache({:error, _err} = error) do
@@ -95,8 +98,8 @@ defmodule SobesReviewWeb.Utils.ReviewsService do
   defp refresh_views_async({:ok, review} = message) do
     SobesReview.Repo.refresh_views()
     review
-    |> Cache.insert_report
     |> SobesReview.Repo.preload_review_deps
+    |> Cache.insert_report
     message
   end
 
