@@ -1,5 +1,5 @@
 defmodule SobesReviewWeb.CacheTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   alias SobesReviewWeb.Utils.Cache
 
   setup %{} do
@@ -33,6 +33,11 @@ defmodule SobesReviewWeb.CacheTest do
       [{_, reports}] = :ets.lookup(:reports, :city)
       assert Map.has_key?(reports, "London") and Map.has_key?(reports, "Paris")
     end
+
+    test "get review count" do
+      Cache.init_repo(@valid_count, [], [])
+      assert Cache.get_reviews_count() == @valid_count
+    end
   end
 
   describe "insert_city" do
@@ -47,4 +52,39 @@ defmodule SobesReviewWeb.CacheTest do
       end
     end
   end
+
+  describe "get_reports" do
+    test "get_reports_by_type valid report" do
+      valid_report = Enum.at(@valid_city_reports, 0)
+      :ets.insert(:reports, {:city, valid_report})
+
+      report_from_cache = Cache.get_reports_by_type(:city)
+      assert valid_report == report_from_cache
+    end
+
+    test "get_reports_by_type empty reports table" do
+      valid_report = Enum.at(@valid_city_reports, 0)
+      :ets.insert(:reports, {:city, valid_report})
+
+      assert Cache.get_reports_by_type(:emotion) == %{}
+    end
+  end
+
+  describe "insert_report" do
+    @valid_review %{id: 11, text: "wow", gender: false, name: "user_1", city: "London",
+      emotion: "Happy", month: 11, time: "12:21"}
+
+    test "insert_report" do
+      Cache.insert_report(@valid_review)
+      Enum.each(Cache.get_reports_keys(), fn key -> check_valid_report(Cache.get_reports_by_type(key), key) end)
+    end
+
+    def check_valid_report(report, selector) do
+      key = @valid_review[selector]
+      data = Enum.at(report[key], 0)
+      assert data.id == @valid_review.id and data.text == @valid_review.text
+    end
+  end
+
+
 end

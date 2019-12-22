@@ -52,10 +52,10 @@ defmodule SobesReviewWeb.Utils.Cache do
     review
   end
 
-
   # adds new data into reports table
   defp insert_into_reports_table(type, id, text, value) do
     reports_map = get_reports_by_type(type)
+
     {_, reports_map} = reports_map
     |> init_map_key_if_not_exists(value)
     |> Map.get_and_update(value, fn val -> {val, [%{id: id, text: text} | val]} end)
@@ -66,8 +66,11 @@ defmodule SobesReviewWeb.Utils.Cache do
   return add data from reports by specific type
   """
   def get_reports_by_type(type) do
-    [{_, res}] = :ets.lookup(:reports, type)
-    res
+     :ets.lookup(:reports, type)
+    |> case  do
+      [{_, res}] -> res
+      [] -> %{}
+    end
   end
 
   defp init_map_key_if_not_exists(map, key) do
