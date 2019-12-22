@@ -1,6 +1,6 @@
 defmodule SobesReviewWeb.UtilsPdotsClientTest do
   use ExUnit.Case
-  import SobesReviewWeb.Utils.PdotsClient, only: [get_emotion: 1]
+  # import SobesReviewWeb.Utils.PdotsClient, only: [get_emotion: 1]
 
   # test "get_emotion correct" do
   #   assert get_emotion("wow, nice") == "Happy"

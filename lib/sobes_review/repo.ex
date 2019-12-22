@@ -47,27 +47,31 @@ defmodule SobesReview.Repo do
   @doc """
   Updates review with emotion_id. Returns {:ok, %Review{}} | {:error, description}
   """
-  def update_review_emotion(emotion_id, %Review{} = review) do
-    attrs = %{emotion_id: emotion_id}
+  def update_review_emotion(%Review{} = review, emotion_id) do
     review
-    |> Review.changeset_emotion(attrs)
+    |> Review.changeset_emotion(%{emotion_id: emotion_id})
     |> update
   end
 
   @doc """
   Adds city into cities db table
+  ## Examples
+  iex> insert_city("London")
+  %City{...}
   """
-  def insert_city(city) do
+  def insert_city(attrs) do
     %City{}
-    |> City.changeset(%{name: city})
-    |> insert!
+    |> City.changeset(attrs)
+    |> insert
   end
 
   @doc """
   Returns city, that was found by name
+  ## Examples
+  iex> get_city("London")
+  %City{...}
   """
-
-  @spec get_city(binary) :: %Review{}
+  @spec get_city(binary) :: %City{}
   def get_city(city) do
     one(from c in City, where: c.name == ^city)
   end
@@ -87,7 +91,6 @@ defmodule SobesReview.Repo do
   defp check_review_insert({:error, handler}) do
     {:error, SobesReview.RepoErrorConverter.convert(handler.errors)}
   end
-
 
   @spec start_transaction_with_callback(atom | %{group_by: any}, fun) :: any
   def start_transaction_with_callback(opts, callback) do
