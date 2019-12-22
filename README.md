@@ -1,20 +1,23 @@
 # SobesReview
-
-To start your Phoenix server:
-
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
-
+Simple Phoenix app. Stores all your reviews in PostgreSQL db and sends you some kind of reports of this reviews.
+# Features
+* upload your reviews in csv files
+* get your reports grouped by city, name, etc
+### Tech
+* [Elixir]
+* [Phoenix]
+* [Ecto] ofc
+* [Materialize.css] for front
+### Installation
+```sh
+$ cd sobesreview
+```
+Then change config/dev.exs file for your Postgres data
+After that
+```sh
+$ mix deps.get
+$ mix ecto.create && mix ecto.migrate
+$ mix phx.server
+```
+And that's all!
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
